@@ -2,6 +2,8 @@
 
 import praw, twitter
 from keys import *
+from time import sleep
+
 
 reddit = praw.Reddit(client_id = client_id,
                      client_secret = client_secret,
@@ -15,16 +17,18 @@ api = twitter.Api(consumer_key = consumer_key,
                   access_token_secret = access_token_secret,
                   sleep_on_rate_limit = True) #twitter api wrapper
 
-ids = [] #ids from posts which were aleady posted, to avoid repetition
 
 def getSubmission():
     for submission in subreddit.hot(limit=10): #goes through the 10 hottest posts in r/news
-        if submission.score >= 1000 and submission.url != None and submission.id not in ids: #checks the amount of upvotes, if the post has a link and if it was not tweeted previously
-            ids.append(submission.id)
+        if submission.score >= 1000 and submission.url != None: #checks the amount of upvotes and if the post has a link
             try:
                 short = 'redd.it/{}'.format(submission.id) #makes a redd.it shortlink using the submission id
                 api.PostUpdate("{title}, {shortLink} {url}".format(title = submission.title, shortLink = short, url = submission.url)) #tweets
+                print(submission.id)
             except:
-                print('dupe')
+                print('duplicate')
 while 1:
+    print('start')
     getSubmission()
+    print('sleep')
+    sleep(600) #sleeps  for 10 min

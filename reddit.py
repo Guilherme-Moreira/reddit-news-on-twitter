@@ -3,6 +3,7 @@
 import praw, twitter
 from keys import *
 from time import sleep
+from datetime import datetime
 
 
 reddit = praw.Reddit(client_id = client_id,
@@ -28,7 +29,7 @@ def getSubmission():
             except:
                 print('duplicate')
 while 1:
-    print('start')
+    print('start at {}'.format(datetime.now()))
     getSubmission()
     print('sleep')
     sleep(600) #sleeps  for 10 min

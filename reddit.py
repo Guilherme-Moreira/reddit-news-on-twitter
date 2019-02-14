@@ -6,12 +6,6 @@ from time import sleep
 from datetime import datetime
 
 
-reddit = praw.Reddit(client_id = client_id,
-                     client_secret = client_secret,
-                     user_agent = 'r/news forwarder') #reddit api wrapper
-
-subreddit = reddit.subreddit('news') #subreddit selector, the one which the posts are going to be selected from
-
 api = twitter.Api(consumer_key = consumer_key,
                   consumer_secret = consumer_secret,
                   access_token_key = access_token_key,
@@ -20,6 +14,13 @@ api = twitter.Api(consumer_key = consumer_key,
 
 
 def getSubmission():
+
+    reddit = praw.Reddit(client_id = client_id,
+                         client_secret = client_secret,
+                         user_agent = 'r/news forwarder') #reddit api wrapper
+
+    subreddit = reddit.subreddit('news') #subreddit selector, the one which the posts are going to be selected from
+
     for submission in subreddit.hot(limit=10): #goes through the 10 hottest posts in r/news
         if submission.score >= 1000 and submission.url != None: #checks the amount of upvotes and if the post has a link
             try:

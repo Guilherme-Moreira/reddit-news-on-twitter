@@ -2,7 +2,6 @@
 
 import praw, twitter
 from keys import *
-from time import sleep
 from datetime import datetime
 
 
@@ -21,16 +20,15 @@ def getSubmission():
 
     subreddit = reddit.subreddit('news') #subreddit selector, the one which the posts are going to be selected from
 
-    for submission in subreddit.hot(limit=10): #goes through the 10 hottest posts in r/news
+    for submission in subreddit.hot(limit=20): #goes through the 10 hottest posts in r/news
         if submission.score >= 1000 and submission.url != None: #checks the amount of upvotes and if the post has a link
             try:
                 short = 'redd.it/{}'.format(submission.id) #makes a redd.it shortlink using the submission id
                 api.PostUpdate("{title}, {shortLink} {url}".format(title = submission.title, shortLink = short, url = submission.url)) #tweets
                 print(submission.id)
-            except:
+            except: #an error will arise if the reddit post has already been posted
                 print('duplicate')
-while 1:
-    print('start at {}'.format(datetime.now()))
-    getSubmission()
-    print('sleep')
-    sleep(600) #sleeps  for 10 min
+
+print('start at {}'.format(datetime.now()))
+getSubmission()
+print('end at {}'.format(datetime.now()))
